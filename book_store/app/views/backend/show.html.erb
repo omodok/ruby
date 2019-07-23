@@ -1,0 +1,36 @@
+<h3>新規オーダーデータ</h3>
+
+<% order = @order %>
+<table border="1" width="600">
+    <tr><th width="100">No.</th><td><%= order.id %></td></tr>
+    <tr><th>商品</th><td>
+
+        <% @syohin_array=JSON.parse(order.syohin, symbolize_names: true) %>
+        <% @syohin_array.each_with_index do |syoseki,i| %>
+        <!--1商品分ソース開始-->
+        <span class="small">
+        <% if i!=@syohin_array.size-1 %>
+          <span style="color:#3142FF">『<%=syoseki[:syomei] %>』</span>
+          <div class="float-right">本体<%=syoseki[:hontai] %>円、数量：<%=syoseki[:suryo] %></div>
+        <% else %>
+          <div class="float-right">
+          数量合計：<%=syoseki[0] %>　<!-左側全角アキ-->
+          本体合計：<%=syoseki[1] %>円　<!-左側全角アキ-->
+          <b>税込合計：<%=syoseki[2] %>円</b>
+        <% end %>
+        </span><br />
+        <!--1商品分ソース終了-->
+        <% end %>
+
+    </td></tr>
+    <tr><th>住所</th><td><%= order.jusyo %></td></tr>
+    <tr><th>氏名</th><td><%= order.shimei %></td></tr>
+    <tr><th>電話</th><td><%= order.denwa %></td></tr>
+    <tr><th>アドレス</th><td><%= order.mailadd %></td></tr>
+    <tr><th>性別</th><td><%= order.seibetu %></td></tr>
+    <tr><th>年齢</th><td><%= order.nenrei %></td></tr>
+    </tr>
+</table>
+
+<%= link_to '編集', edit_backend_path(@order) %> |
+<%= link_to '戻る', backend_index_path %>

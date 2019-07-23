@@ -1,0 +1,40 @@
+<%= form_with(model: meibo, local: true) do |form| %>
+  <% if meibo.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(meibo.errors.count, "error") %> 名簿を保存できませんでした。:</h2>
+
+      <ul>
+      <% meibo.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :氏名 %>
+    <%= form.text_field :shimei %>
+  </div>
+
+  <div class="field">
+    <%= form.label :住所 %>
+    <%= form.text_area :jusyo %>
+  </div>
+
+  <div class="field">
+    <%= form.label :電話 %>
+    <%= form.text_field :denwa %>
+  </div>
+
+  <%= form.fields_for :tuikameibo do |p| %>
+    <%= p.label :fax番号 %>
+    <%= p.text_field :faxnum %>
+
+    <%= p.label :メールアドレス %>
+    <%= p.text_field :mailadd %>
+  <% end %>
+
+  <div class="actions">
+    <%= form.submit buttonName %>
+  </div>
+<% end %>

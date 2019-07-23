@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Shimei:</strong>
+  <%= @meibo.shimei %>
+</p>
+
+<p>
+  <strong>Jusyo:</strong>
+  <%= @meibo.jusyo %>
+</p>
+
+<p>
+  <strong>Denwa:</strong>
+  <%= @meibo.denwa %>
+</p>
+
+<%= link_to 'Edit', edit_meibo_path(@meibo) %> |
+<%= link_to 'Back', meibos_path %>

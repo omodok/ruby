@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MeiboApp</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body bgcolor="#ffff99">
+    <% if user_signed_in? %>
+      <%= link_to "アカウント編集", edit_user_registration_path %>
+      <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
+      ログイン中：<%= current_user.email %>
+    <% else %>
+      <%= link_to "ログイン", new_user_session_path %>
+      <%= link_to "新規ユーザ登録", new_user_registration_path %>
+    <% end %>
+    <p  id="notice" class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+    <%= yield %>
+  </body>
+</html>

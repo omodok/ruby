@@ -1,0 +1,65 @@
+<h1>formビュー</h1>
+
+<%= form_with(url: "/backend/delete", local: true) do  %>
+<%= select_tag 'checktype', options_for_select({"発送" => "sended", "削除" => "delete"}) %>
+<table border="1" width="1000">
+  <thead>
+    <tr>
+      <th>削除No.</th>
+      <th>商品</th>
+      <th>住所</th>
+      <th>氏名</th>
+      <th>作成日</th>
+      <th>更新日</th>
+      <th>発送日</th>
+      <th colspan="3" width="120">操作</th>
+    </tr>
+  </thead>
+  <% ksnum = 0 %>
+  <tbody>
+    <% @orders.each do |order| %>
+      <tr>
+        <td width="50"><%= check_box_tag ksnum, checked_value = order.id %>
+        <%= order.id %></td>
+        <td width="350">
+
+        <% @syohin_array=JSON.parse(order.syohin, symbolize_names: true) %>
+        <% @syohin_array.each_with_index do |syoseki, i| %>
+        <!--1商品分ソース開始-->
+        <span class="small">
+        <% if i!=@syohin_array.size-1 %>
+          <span style="color:#3142FF">『<%=syoseki[:syomei] %>』</span>
+          <div class="float-right">本体<%=syoseki[:hontai] %>円、数量：<%=syoseki[:suryo] %></div>
+        <!--1商品分ソース終了-->
+        <% else %>
+          <div class="float-right">
+          数量合計：<%=syoseki[0] %>　<!-左側全角アキ-->
+          本体合計：<%=syoseki[1] %>円　<!-左側全角アキ-->
+          <b>税込合計：<%=syoseki[2] %>円</b></div>
+        <% end %>
+        </span><br />
+        <% end %>
+
+        </td>
+        <td><%= order.jusyo %></td>
+        <td><%= order.shimei %></td>
+        <td><%= l(order.created_at,:format => :short) %></td>
+        <td><%= l(order.updated_at,:format => :short) %></td>
+        <td><%= l(order.sended_at,:format => :short) if order.sended_at %></td>
+        <td width="30"><%= link_to '表示', backend_path(order) %></td>
+        <td width="30"><%= link_to '編集', edit_backend_path(order) %></td>
+        <td width="30"><%= link_to '削除', backend_path(order), method: :delete, data: { confirm: '本当にいいですか?' } %></td>
+      </tr>
+      <% ksnum += 1 %>
+    <% end %>
+  </tbody>
+</table>
+<%= password_field_tag "sakujo",cookies[:sakujo]%>
+<%= submit_tag "管理用送信" %>
+<% end %>
+<hr/>
+<span class="prev"><%= link_to "［前の#{@kensu}件へ］", "/backend?page=#{@mae}" %></span>
+<span class="next"><%= link_to "［次の#{@kensu}件へ］", "/backend?page=#{@tugi}" %></span>
+<%= link_to "［Userビューへ］", "/users" %>
+<%= link_to("［CSVをダウンロード］","/admin/orders.csv",{format: :csv}) %>
+<br>

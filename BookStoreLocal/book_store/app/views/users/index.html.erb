@@ -1,0 +1,35 @@
+<h1>formビュー</h1>
+
+<table border="1" width="1000">
+  <thead>
+    <tr>
+      <th>No.</th>
+      <th>管理者</th>
+      <th>住所</th>
+      <th>氏名</th>
+      <th>電話</th>
+      <th>アドレス</th>
+      <th>性別</th>
+      <th>年齢</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.id %></td>
+        <td><%= link_to "#{user.admin}", edit_user_path(user.id) %></td>
+        <td><%= user.jusyo %></td>
+        <td><%= user.shimei %></td>
+        <td><%= user.denwa %></td>
+        <td><%= user.email %></td>
+        <td><%= user.seibetu %></td>
+        <td><%= user.nenrei %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<hr/>
+<span class="prev"><%= link_to "［前の#{@kensu}件へ］", "/users?page=#{@mae}" %></span>
+<span class="next"><%= link_to "［次の#{@kensu}件へ］", "/users?page=#{@tugi}" %></span>
+<%= link_to "［formビューへ］", "/backend" %>
+<br>

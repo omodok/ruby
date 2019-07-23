@@ -1,0 +1,6 @@
+<h1>名簿の更新</h1>
+
+<%= render 'form', meibo: @meibo %>
+
+<%= link_to '表示', @meibo %> |
+<%= link_to '戻る', meibos_path %>

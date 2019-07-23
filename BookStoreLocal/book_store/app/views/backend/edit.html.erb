@@ -1,0 +1,13 @@
+<h3>オーダーデータの更新</h3>
+
+<% order = @order %>
+<% @syohin_array=JSON.parse(order.syohin, symbolize_names: true) %>
+<% goukeiRan = @syohin_array.pop %>
+<% session[:gokei]=goukeiRan[0] %>
+<% session[:gokei2]=goukeiRan[1] %>
+<% session[:zeikomi]=goukeiRan[2] %>
+
+<%= render 'form', order: @order %>
+
+<%= link_to '表示', backend_path(@order) %> |
+<%= link_to '戻る', backend_index_path %>

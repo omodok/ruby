@@ -1,0 +1,90 @@
+	<h1>Railsブログ掲示板</h1>
+<span style="font-size: small"><b>
+ここにはこのブログがどんなブログかがわかるようにコメント文を記入する。</b></span>
+
+<%= form_with(model: @blog, local: true) do |form| %>
+  <% if @blog.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@blog.errors.count, "error") %> ブログを保存できませんでした。:</h2>
+
+      <ul>
+      <% @blog.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<table style="border-collapse: separate; border-spacing: 5px;width:580px;border:0">
+	<tr style="background-color:#505050"><td style="text-align: center">投稿者</td>
+	<tbody><tr style="background-color:#505050"><td style="text-align: center">投稿者</td>
+	<td>
+
+<input name="shimei" type="text" size="25"> 
+
+		<span style="color:#66CDAA; font-size:small">◎ハンドルネームでも可</span></td></tr>
+	<tr style="background-color:#505050">	<td style="text-align: center">E-mail</td>
+	<td>
+
+<input name="mailadd" type="text" size="40">
+
+		<span style="color:#66CDAA; font-size:small">◎省略可能</span></td></tr>
+	<tr style="background-color:#505050">	<td style="text-align: center">タイトル</td>
+	<td>
+
+<input name="subject" type="text" size="40">
+
+		<span style="color:#66CDAA; font-size:small">◎必須項目</span></td></tr>
+	<tr style="background-color:#505050">	<td style="text-align: center">内　容</td>
+	<td>
+
+<textarea name="message" cols="40" rows="5"></textarea>
+
+		<span style="color:#66CDAA; font-size:small">◎必須項目</span></td></tr>
+	<tr style="background-color:#2F4F4F">
+	<td style="text-align: center">送　信</td>
+	<td>
+
+<input type="submit" value="送信する">
+
+</td></tr>
+</tbody></table>
+
+<% end %>
+
+<span style="font-size: small">
+        ■間違って投稿された方は、ご面倒でも<a href="mailto:xxxx@xxxx.co.jp">管理人</a>までメールでご連絡ください。<br>
+        ■このブログの内容欄ではhtmlタグはご利用になれません。</span>
+
+<form>
+
+<!--データベースのボディ開始-->
+<table style="width:580px;border:0">
+<tbody><tr><td><hr></td></tr>
+	<tr><td style="background-color:#505050">
+		
+<input type="checkbox">
+
+	<b>掲示板のダミー投稿</b></td></tr>
+	<tr><td>投稿者：<b><a href="mailto:abc@def.com">小椋　稔</a></b>1970年1月1日<br><br>この掲示板はRuby on Railsで作られています。
+	</td></tr></tbody></table><br>
+<!--データベースのボディ終了-->
+
+<table style="width:580px;border:0">
+	<tbody><tr><td colspan="2"><hr></td></tr>
+	<tr><td colspan="2">
+
+<input type="password">
+<input type="submit" value="管理者用削除">
+
+	</td></tr><tr><td>
+	<span style="font-size: small">Omodok-Rails-Blog v1.0</span></td>
+	<td align="right">
+
+	<span class="prev">［前の5件へ］</span>
+	<span class="next">［次の5件へ］</span>
+
+	</td></tr>
+</tbody></table>
+
+</form>

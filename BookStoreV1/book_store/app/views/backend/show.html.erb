@@ -1,0 +1,17 @@
+<h3>新規オーダーデータ</h3>
+
+<% order = @order %>
+<table border="1" width="600">
+    <tr><th width="100">No.</th><td><%= order.id %></td></tr>
+    <tr><th>商品</th><td><%= order.syohin %></td></tr>
+    <tr><th>住所</th><td><%= order.jusyo %></td></tr>
+    <tr><th>氏名</th><td><%= order.shimei %></td></tr>
+    <tr><th>電話</th><td><%= order.denwa %></td></tr>
+    <tr><th>アドレス</th><td><%= order.mailadd %></td></tr>
+    <tr><th>性別</th><td><%= order.seibetu %></td></tr>
+    <tr><th>年齢</th><td><%= order.nenrei %></td></tr>
+    </tr>
+</table>
+
+<%= link_to '編集', edit_backend_path(@order) %> |
+<%= link_to '戻る', backend_index_path %>

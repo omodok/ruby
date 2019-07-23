@@ -1,0 +1,149 @@
+<body class="m-2 omo-bgc-1">
+<!---段組みの開始---->
+<div style="width:10px"></div>
+<!---左フロート開始---->
+<div style="width:550px;float:left">
+<img src="/img/kbooks.gif" width="525" height="48" alt="books">
+<br />
+<table class="table-borderless" style="width:550px">
+	<tr>
+		<td> <span class="small">オモドックの「コドモブックス」シリーズは子どもたちが大人になるための踏み台となる本を提供しています。</span></td>
+</tr>
+</table>
+<br />
+
+<% @products.each do |product| %>
+<!--データベースのボディ開始-->
+<table class="table-borderless">
+  <tr align="left">
+    <td colspan="2" style="vertical-align:top"><span class="text-danger">■</span><span class="text-primary"><b>『<%= product.syohin %>』</b></span>（<%= product.taisyo %>）<br />
+        <hr style="height: 0px">
+    </td>
+  </tr>
+  <tr>
+    <td width="150" align="center" valign="top"> 
+    <% if product.img_path.url %>
+      <%= image_tag product.img_path.url %>
+    <% end %>
+    <br />
+    </td>
+
+    <td width="360" valign="top"> <b>著者：</b><%= product.tyosya %><br />
+        <b>発売：</b>星雲社　<b>発行：</b>オモドック<br />
+        <b>定価：</b>本体<%= product.hontai %>円＋税<br />
+        <b>体裁：</b><%= product.teisai %><br />
+        <b>内容：</b><span class="small"><%= product.naiyo %></span>
+        <hr style="height: 0px">
+      
+        <%= form_with(url: "/frontend/cart", local: true) do  %>
+        <%= hidden_field :cart, :id, value:product.id %>
+        <%= hidden_field :cart, :syomei, value:product.syohin %>
+        <%= hidden_field :cart, :hontai, value:product.hontai %>
+        <%= number_field :cart, :suryo,{min:1,size: 2,value:1} %>冊<br />
+        <%= image_submit_tag("/img/cart.gif") %>
+        <% end %>
+
+ </td>
+</table>
+<hr style="height: 0px">
+<br />
+
+<!--データベースのボディ終了-->
+<% end %>
+<table style="width:550px;border:0">
+	<tr><td>
+	<span style="font-size: small">Omodok-Rails-Blog v1.0</span></td>
+	<td align="right">
+
+	<span class="prev">
+	<%= link_to "［前の#{@kensu}件へ］", "/frontend/store?page=#{@mae}" %></span>
+	<span class="next">
+	<%= link_to "［次の#{@kensu}件へ］", "/frontend/store?page=#{@tugi}" %></span>
+
+	</td></tr>
+</table>
+［<a href="/frontend/store2">Digital Books</a>］<br />
+<br />
+<span class="text-danger">■</span><span style="color:midnightblue"><b>発売元・発行元</b></span><br />
+<hr style="height: 0px">
+<span style="color:midnightblue"><b>発売元／</b></span><span class="text-primary"><b>星雲社</b></span><br />
+		<b><span style="color:midnightblue">電話：03-5348-1283</b><br />
+		<span style="color:midnightblue"><b>発行元／</b></span><span class="text-primary"><b>有限会社オモドック：出版事業部</b></span><br />
+		<b><span style="color:midnightblue"> 〒150 東京都新宿区百人町2-4-5-607<br />
+</span> </b>
+<hr style="height: 0px">
+</td></tr></table>
+
+</div>
+<!---左フロート終了---->
+<!---右フロート開始---->
+<div style="float:left">
+
+<!--ログイン状況開始-->
+<table style="width:150px">
+
+<tbody><tr><td class="border border-primary bg-primary">
+<img src="/img/jokyo.gif" alt="" /></td></tr>
+
+<!--htmlソース開始-->
+<tr><td class="p-1 border border-primary bg-white">
+<% if signed_in? %>
+  <span class="small">ログインID：<br /><%= current_user.email %></span><br />
+  <%= link_to '［ログアウト］', destroy_user_session_path, method: :delete %>
+  <%= link_to '［ユーザ編集］',edit_user_registration_path %>
+<% else %>
+  <%= link_to '［ログイン］', new_user_session_path %><br />
+  <%= link_to '［アカウント登録］', new_user_registration_path %>
+<% end %>
+</td></tr>
+</table>
+<!--htmlソース終了-->
+<div style="margin-bottom:4px"></div>
+
+<!--ログイン状況終了-->
+<!--買い物カゴ開始-->
+<table style="width:150px">
+
+<tbody><tr><td class="border border-primary bg-primary">
+<img src="/img/kago.gif" alt=""></td></tr>
+
+<% gokei = 0 %>
+<% gokei2 = 0 %>
+<% zeikomi = 0 %>
+<% ksnum = 0 %>
+<% @syohin_array.each do |syoseki| %>
+<!--1商品分ソース開始-->
+<tr><td class="p-2 border border-primary text-right bg-white">
+<span class="small">
+<span style="color:#3142FF">『<%=syoseki[:syomei] %>』</span><br />
+本体<%=syoseki[:hontai] %>円、数量：<%=syoseki[:suryo] %><br />
+<%= link_to "［棚に戻す］", "/frontend/cart?m_syomei=#{ksnum}" %>
+</span></td></tr>
+<!--1商品分ソース終了-->
+<% gokei += syoseki[:suryo].to_i %>
+<% gokei2 += syoseki[:hontai].to_i*syoseki[:suryo].to_i %>
+<% ksnum += 1 %>
+<% end %>
+<% zeikomi = (gokei2*@zeiritu).round %>
+<% session[:gokei]=gokei; session[:gokei2]=gokei2; session[:zeikomi]=zeikomi %>
+<tr><td class="p-2 border border-primary text-right" style="background-color:#cccccc">
+<span class="small">数量合計：<%= gokei %><br>
+本体合計：<%= gokei2 %>円<br>
+<b>税込合計：<%= zeikomi %>円</b></span><br>
+</td></tr>
+<tr><td class="p-2 border border-primary" style="background-color:#AAAAAA">
+レジで精算する
+<div class="submit">
+<%= button_to "注文ページへ", "/backend/new", method: :get %>
+</div>
+</td></tr>	</tbody></table>
+<div class="small" style="padding-top:5px;width:150px">
+<strong>＊買い物カゴの利用方法</strong></div>
+<div style="font-size:0.7em;line-height:1.2;width:150px">
+1)お買い求めになりたい書籍の［この本をカゴへ］ボタンをクリックして下さい。<br>
+2)カゴの出し入れは自由です。カゴに入れただけでは料金は発生いたしません。<br>
+3)購入時は［注文ページへ進む］ボタンをクリックして注文書へお進み下さい。</div>
+<br><br>
+<!--買い物カゴ終了-->
+</div>
+<!---右フロート終了---->

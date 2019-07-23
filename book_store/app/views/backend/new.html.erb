@@ -1,0 +1,20 @@
+<h4 class="omo-c-1">Omodok 書籍注文書</h4>
+<small>
+<ul>
+<li>代金のお支払いは、クレジットカードのみになります。
+<li>送料は1冊からサービスになります。
+</ul></small>
+<hr class="h-0">
+
+<% @order.jusyo = current_user.jusyo %>
+<% @order.shimei = current_user.shimei %>
+<% @order.denwa = current_user.denwa %>
+<% @order.mailadd = current_user.email %>
+<% @order.seibetu = current_user.seibetu %>
+<% @order.nenrei = current_user.nenrei %>
+
+<%= render 'form', order: @order %>
+
+<br />
+<a href="/frontend/store">［前ページで商品を選びなおす］</a>
+

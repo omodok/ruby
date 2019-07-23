@@ -1,0 +1,28 @@
+<p>
+  <strong>氏名:</strong>
+  <%= @meibo.shimei %>
+</p>
+
+<p>
+  <strong>住所:</strong>
+  <%= @meibo.jusyo %>
+</p>
+
+<p>
+  <strong>電話:</strong>
+  <%= @meibo.denwa %>
+</p>
+<% if @meibo.tuikameibo[0] %>
+<p>
+  <strong>Fax:</strong>
+  <%= @meibo.tuikameibo[0][:faxnum] %>
+</p>
+
+<p>
+  <strong>Eメール:</strong>
+  <%= @meibo.tuikameibo[0][:mailadd] %>
+</p>
+<% end %>
+
+<%= link_to '編集', edit_meibo_path(@meibo) %> |
+<%= link_to '戻る', meibos_path %>

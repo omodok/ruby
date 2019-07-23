@@ -1,0 +1,2 @@
+class Meibo < ApplicationRecord
+end

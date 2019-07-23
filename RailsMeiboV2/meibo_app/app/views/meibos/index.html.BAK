@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Rails簡易名簿</h1>
+
+<%= render 'form', meibo: @meibo, buttonName: "作成" %>
+
+<hr/>
+
+<%= form_with(url: "/meibos/delete", local: true) do  %>
+<table border="1" width="700">
+  <thead>
+    <tr>
+      <th>削除No.</th>
+      <th>氏名</th>
+      <th>住所</th>
+      <th>電話</th>
+      <th colspan="3">操作</th>
+    </tr>
+  </thead>
+  <% ksnum = 0 %>
+  <tbody>
+    <% @meibos.each do |meibo| %>
+      <tr>
+        <td width="50"><%= check_box_tag ksnum, checked_value = meibo.id %>
+        <%= meibo.id %></td>
+        <td><%= meibo.shimei %></td>
+        <td><%= meibo.jusyo %></td>
+        <td><%= meibo.denwa %></td>
+        <td width="30"><%= link_to '表示', meibo %></td>
+        <td width="30"><%= link_to '編集', edit_meibo_path(meibo) %></td>
+        <td width="30"><%= link_to '削除', meibo, method: :delete, data: { confirm: '本当にいいですか?' } %></td>
+      </tr>
+      <% ksnum += 1 %>
+    <% end %>
+  </tbody>
+</table>
+<%= password_field_tag "sakujo",cookies[:sakujo]%>
+<%= submit_tag "管理用削除" %>
+<% end %>
+<hr/>
+
+<%= paginate @meibos %>
+
+<br>

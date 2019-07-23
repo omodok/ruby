@@ -1,0 +1,57 @@
+<%= render 'form', product: @product %>
+
+<%= form_with(url: "/frontend/delete", local: true) do  %>
+<% ksnum = 0 %>
+<% @products.each do |product| %>
+<!--データベースのボディ開始-->
+<%= check_box_tag ksnum, checked_value = product.id %>
+削除/<%= link_to '編集', edit_frontend_path(product) %>
+<table class="table-borderless">
+  <tr align="left">
+    <td colspan="2" style="vertical-align:top"><span class="text-danger">■</span><span class="text-primary"><b>『<%= product.syohin %>』</b></span>（<%= product.taisyo %>）<br />
+        <hr style="height: 0px">
+    </td>
+  </tr>
+  <tr>
+    <td width="150" align="center" valign="top"> 
+    <% if product.img_path.url %>
+      <%= image_tag product.img_path.url %>
+    <% end %>
+    <br />
+    </td>
+
+    <td width="360" valign="top"> <b>著者：</b><%= product.tyosya %><br />
+        <b>発売：</b>星雲社　<b>発行：</b>オモドック<br />
+        <b>定価：</b>本体<%= product.hontai %>円＋税<br />
+        <b>体裁：</b><%= product.teisai %><br />
+        <b>内容：</b><span class="small"><%= product.naiyo %></span>
+        <hr style="height: 0px">
+      <a href="/backend/new">［本を購入する］</a> </td>
+  </tr>
+</table>
+<hr style="height: 0px">
+<br />
+
+<!--データベースのボディ終了-->
+<% ksnum += 1 %>
+<% end %>
+<table style="width:580px;border:0">
+	<tr><td colspan="2"><hr /></td></tr>
+	<tr><td colspan="2">
+
+<%= password_field_tag "sakujo"%>
+<%= submit_tag "管理用削除" %>
+
+	</td></tr><tr><td>
+	<span style="font-size: small">Omodok-Rails-Blog v1.0</span></td>
+	<td align="right">
+
+	<span class="prev">
+	<%= link_to "［前の#{@kensu}件へ］", "/frontend?page=#{@mae}" %></span>
+	<span class="next">
+	<%= link_to "［次の#{@kensu}件へ］", "/frontend?page=#{@tugi}" %></span>
+
+	</td></tr>
+</table>
+
+<% end %>

@@ -1,0 +1,139 @@
+#####モジュールの読み込み
+require 'cgi'
+
+#####初期設定
+@kensu = 5		#1ページに表示する件数
+@mae = 0		#先頭ページの開始添え字
+@tugi = @kensu	#先頭ページの次のページ
+
+####これよりメソッド定義
+def pagenation(lines,fom) 
+	kaishi = 0
+
+	page = fom["page"]
+
+	if page!=""
+		kaishi= page.to_i
+	end
+	
+	@tugi=kaishi+@kensu
+
+	if @tugi > lines.size
+		@tugi = lines.size
+	end
+	
+	@mae=kaishi-@kensu
+
+	if @mae < 0
+		@mae = 0
+	end
+	
+	id = kaishi...@tugi
+	
+	return id
+
+end
+
+def tuika(fom) 
+	#安全なデータ受信処理：開始
+	fom = fom.params
+	fom.each do |key, val|
+		val = val[0]
+		val.gsub!(',', '，' ) 		#最後の，は全角文字
+		val = CGI.escapeHTML(val)
+		val.gsub!('\r\n', '<br />')
+		val.gsub!('\n', '<br />')
+		val.gsub!('\r', '<br />')
+		fom[key] = val
+	end
+	#安全なデータ受信処理：終了
+
+	shimei = fom["shimei"]
+	jusyo = fom["jusyo"]
+	denwa = fom["denwa"]
+	
+	begin
+		f = File.open("meibolog", encoding: 'UTF-8')
+	rescue => e
+		f = open("meibolog","a+")
+	end
+
+	lines = f.readlines
+	f.close
+
+	value = shimei+","+jusyo+","+denwa+"\n"
+	lines.push(value)
+
+	File.open('meibolog','w:UTF-8') do |f|
+		line = lines.join("") 
+		f.write line 
+	end
+end
+def errorStr(str) 
+	print str
+	print "<br />ブラウザの戻るボタンでお戻りください。"
+	print "</body></html>"
+	exit
+end
+
+####これよりhtml表示
+print "Content-Type: text/html\n\n"
+print(<<"HTML_END")
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<title>名簿</title></head>
+<body bgcolor="#ffff99">
+HTML_END
+
+####これよりメインプログラムname = cgi['name']
+fom = CGI.new
+
+if fom['shimei'] != "" and fom['jusyo'] != ""
+	tuika(fom)
+
+elsif fom["shimei"] != "" and not fom["jusyo"] != ""
+	errorStr("住所がありません。入力してください。") 
+
+elsif not fom["shimei"] != "" and fom["jusyo"] != ""
+	errorStr("氏名がありません。入力してください。") 
+
+end
+
+####これよりbody内容
+print(<<"HTML_END")
+<h1 style="font-size:1.5em">Ruby簡易名簿</h1>
+<form action="/cgi-bin/omodok_meibo.cgi" method="post">
+氏名<input name="shimei" value=""><br />
+住所<textarea cols="50" row="2" wrap="soft" name="jusyo"></textarea><br />
+電話<input name="denwa">
+<input type="submit" value="送信">
+</form>
+<hr/>
+
+<table border="1" width="700">
+<tr><th>氏名</th><th>住所</th><th>電話</th></tr>
+HTML_END
+
+begin
+	f = File.open("meibolog", encoding: 'UTF-8')
+rescue => e
+	f = open("meibolog","a+")
+end
+
+lines = f.readlines
+f.close
+
+id = pagenation(lines,fom)
+id.each do |i|
+	shimei,jusyo,denwa = lines[i].split(",")
+	print(<<"HTML_END")
+<tr><td>#{shimei}</td>
+<td>#{jusyo}</td>
+<td>#{denwa}</td></tr>
+HTML_END
+end
+
+puts '</table><hr />'
+puts "<a href=\"/cgi-bin/omodok_meibo.cgi?page=#{@mae}\">前の#{@kensu}件へ</a>"
+puts "<a href=\"/cgi-bin/omodok_meibo.cgi?page=#{@tugi}\">次の#{@kensu}件へ</a>"
+puts '</body></html>'

@@ -1,0 +1,56 @@
+<%= form_with(model: @order, :url => {:action => :create}, local: true) do |form| %>
+  <% if @order.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@order.errors.count, "error") %> prohibited this @order from being saved:</h2>
+      <ul>
+      <% @order.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<table class="border border-primary" style="background-color: #DEE8FF">
+<thead>
+<tr class="border-bottom border-primary"><th class="p-2 omo-bgc-3">注　文　書</th>
+	<th class="p-2 omo-bgc-3"><big>下記の書籍を注文します。</big></th></tr>
+</thead>
+<tbody>
+<tr class="border-bottom border-primary"><td class="p-2 border-right border-primary">商品名：</td>
+	<td class="p-2">
+<% ksnum = 0 %>
+<% @syohin_array.each do |syoseki| %>
+<!--1商品分ソース開始-->
+<span class="small">
+<span style="color:#3142FF">『<%=syoseki[:syomei] %>』</span>
+本体<%=syoseki[:hontai] %>円、数量：<%=syoseki[:suryo] %>
+</span><br />
+<!--1商品分ソース終了-->
+<% ksnum += 1 %>
+<% end %>
+
+<span class="small">数量合計：<%= session[:gokei] %>　
+本体合計：<%= session[:gokei2] %>円　
+<b>税込合計：<%= session[:zeikomi] %>円</b></span>
+	</td></tr>	
+<tr class="border-bottom border-primary"><td class="p-2 border-right border-primary">住　　所：</td>
+	<td class="p-2"><%= form.text_field :jusyo, size:30 %></td></tr>
+<tr class="border-bottom border-primary"><td class="p-2 border-right border-primary">氏　　名：</td>
+	<td class="p-2"><%= form.text_field :shimei %>　<small>*住所・氏名は必須項目。</small></td></tr>
+<tr class="border-bottom border-primary"><td class="p-2 border-right border-primary">電　　話：</td>
+	<td class="p-2"><%= form.text_field :denwa %></td></tr>
+<tr class="border-bottom border-primary"><td class="p-2 border-right border-primary">E_mail：</td>
+	<td class="p-2"><%= form.text_field :mailadd, size:30 %>　<small>*携帯アドレス不可。</small></td></tr>
+<tr class="border-bottom border-primary"><td class="p-2 border-right border-primary">性　　別：</td>
+	<td class="p-2">
+	<%=form.radio_button :seibetu, "男性"%>男性
+	<%=form.radio_button :seibetu, "女性"%>女性
+	</td></tr>
+<tr class="border-bottom border-primary"><td class="p-2 border-right border-primary">年　　齢：</td>
+	<td class="p-2"><%= form.text_field :nenrei, size:8 %>歳</td></tr>
+<tr><td class="p-2 border-right border-primary">送　　信：</td>
+	<td class="p-2">以上の内容でよろしければ商品を
+	<%= form.submit "購入" %>する。
+</td></tr></tbody>
+
+</table>
+<% end %>
